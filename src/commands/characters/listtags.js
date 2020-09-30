@@ -30,7 +30,12 @@ export default class ListTagsCommand extends Command {
 		const last = args.length >= 1 ? args.length - 1 : 0;
 		const page = !isNaN(args[last]) ? parseInt(args.pop()) : 1;
 		const search = args.join(' ');
-		let characters = await Character.findInGuildViaTags(message.guild, `,${search},`, false);
+		let characters;
+		if(search === '') {
+			characters = await Character.findInGuildViaTags(message.guild, search, false);
+		} else {
+			characters = await Character.findInGuildViaTags(message.guild, `,${search},`, false);
+		}
 		if(characters.length > 0) {
 			characters.sort((a, b) => a.name < b.name ? -1 : a.name > b.name ? 1 : 0);
 			const paginated = this.bot.util.paginate(characters, page, Math.floor(config.paginationItems));

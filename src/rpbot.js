@@ -25,6 +25,7 @@ import MaxRollCommand from './commands/dice/max';
 import MinRollCommand from './commands/dice/min';
 
 bot.logger.info(`RPBot v${version} is starting...`);
+bot.logger.info(version);
 analytics.sendEvent('Bot', 'started');
 
 // Create bot
@@ -54,8 +55,9 @@ export const client = bot
 		config: config,
 		version: version,
 		dice: DiceExpression
-	})
-.createClient();
+	});
+client.config.version = version;
+client.createClient();
 
 // Set up command analytics
 

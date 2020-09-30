@@ -3,6 +3,7 @@
 
 import { Command, CommandFormatError } from 'discord-graf';
 import Character from '../../database/character';
+import { RichEmbed } from 'discord.js';
 
 export default class ViewCharacterCommand extends Command {
 	constructor(bot) {
@@ -43,8 +44,30 @@ export default class ViewCharacterCommand extends Command {
 			} else {
 				tags = '';
 			}
+			if(`Character **${characters[0].name}** (created by ${ownerName}):\n${characters[0].info}\n\nTags:${tags}` === null) {
+				tags = '';
+			}
+			let embed;
+			embed = new RichEmbed()
+				// .setColor('#0099ff')
+				.setTitle('Character: **${characters[0].name}**')
+				// .setURL('https://discord.js.org/')
+				.setAuthor('Created by: ${ownerName}')
+				.setDescription('${characters[0].info}')
+				// .setThumbnail('https://i.imgur.com/wSTFkRM.png')
+				// .addFields(
+				//	{ name: 'Regular field title', value: 'Some value here' },
+				//	{ name: '\u200B', value: '\u200B' },
+				//	{ name: 'Inline field title', value: 'Some value here', inline: true },
+				//	{ name: 'Inline field title', value: 'Some value here', inline: true },
+				// )
+				// .addField('Inline field title', 'Some value here', true)
+				// .setImage('https://i.imgur.com/wSTFkRM.png')
+				.setTimestamp()
+				.setFooter('Tags:${tags}');
 
-			return `Character **${characters[0].name}** (created by ${ownerName}):\n${characters[0].info}\n\nTags:${tags}`;
+			return embed;
+			// return `Character **${characters[0].name}** (created by ${ownerName}):\n${characters[0].info}\n\nTags:${tags}`;
 		} else if(characters.length > 1) {
 			return this.bot.util.disambiguation(characters, 'characters');
 		} else {
